@@ -52,5 +52,28 @@ class Producto
 
         return $consulta->fetchObject('Producto');
     }
+
+    public static function modificarProducto($producto)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_productos SET 
+        nombre = :nombre, precio = :precio, sector = :sector WHERE id = :id");
+        $consulta->bindValue(':id', $producto->id, PDO::PARAM_INT);
+        $consulta->bindValue(':nombre', $producto->nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':precio', $producto->precio, PDO::PARAM_STR);
+        $consulta->bindValue(':sector', $producto->sector, PDO::PARAM_STR);
+
+        return $consulta->execute();
+    }
+
+    public static function borrarProducto($id)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_productos SET 
+        disponible = false WHERE id = :id AND disponible = true");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+
+        return $consulta->execute();
+    }
 }
 ?>

@@ -4,6 +4,7 @@ require_once './models/Pedido.php';
 require_once './models/ProductoPedido.php';
 require_once './controllers/UsuarioController.php';
 require_once './interfaces/IApiUsable.php';
+require_once './controllers/LogController.php';
 
 class MesaController extends Mesa implements IApiUsable
 {
@@ -66,12 +67,47 @@ class MesaController extends Mesa implements IApiUsable
 
   public function ModificarUno($request, $response, $args)
   {
+    $datos = $request->getParsedBody();
     
+    $mesaAModificar = new Mesa();
+    $mesaAModificar->id=$datos["id"]; 
+    $mesaAModificar->codigoMesa=$datos["codigoMesa"]; 
+    $mesaAModificar->estado=$datos["estado"];
+    $mesaAModificar->disponible=$datos["disponible"]; 
+  
+    if(Mesa::modificarMesa($mesaAModificar)) 
+    {
+      $payload = json_encode(array("mensaje" => "Mesa modificada con exito"));
+      $response->getBody()->write($payload);
+      $response = $response->withStatus(200);
+      return $response->withHeader('Content-Type', 'application/json');
+    } 
+    else 
+    {
+      $payload = json_encode(array("mensaje" => "No se pudo modificar la mesa. Intente nuevamente"));
+      $response->getBody()->write($payload);
+      $response = $response->withStatus(400);
+      return $response->withHeader('Content-Type', 'application/json');
+    }
   }
   
   public function BorrarUno($request, $response, $args)
   {
-    
+    $id =  $args["id"];
+    if (Mesa::borrarMesa($id)) 
+    {
+      $payload = json_encode(array("mensaje" => "Mesa borrada con exito"));
+      $response->getBody()->write($payload);
+      $response = $response->withStatus(200);
+      return $response->withHeader('Content-Type', 'application/json');
+    }
+    else 
+    {
+      $payload = json_encode(array("mensaje" => "No se pudo borrar la mesa. Intente nuevamente"));
+      $response->getBody()->write($payload);
+      $response = $response->withStatus(400);
+      return $response->withHeader('Content-Type', 'application/json');
+    }
   }
   
 }

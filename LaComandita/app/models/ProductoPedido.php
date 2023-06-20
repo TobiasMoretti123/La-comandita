@@ -36,6 +36,37 @@ class ProductoPedido
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
-    } 
+    }
+    
+    public static function modificarProductoPedido($pedido)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_productospedidos
+        SET estado = :estado WHERE id = :id");
+        $consulta->bindValue(':estado', $pedido->estado, PDO::PARAM_STR);
+        $consulta->bindValue(':id', $pedido->id, PDO::PARAM_STR);
+
+        $consulta->execute();
+    }
+
+    public static function borrarProductoPedido($id)
+    {       
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_productospedidos
+        SET estado = 'cancelado' WHERE id = :id AND estado != 'cancelado'");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        
+        $consulta->execute();   
+    }
+
+    public static function borrarProductoPedidoPorCodigo($codigoPedido)
+    {       
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productospedidos
+        SET estado = 'cancelado' WHERE codigoPedido = :codigoPedido AND estado != 'cancelado'");
+        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_INT);
+        
+        $consulta->execute();   
+    }
 }
 ?>

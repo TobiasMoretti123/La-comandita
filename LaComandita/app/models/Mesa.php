@@ -61,6 +61,40 @@ class Mesa
 
         return $consulta->fetchObject('Mesa');
     }
+
+    public static function modificarMesa($mesa)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_mesas SET 
+        codigoMesa = :codigoMesa, estado = :estado, disponible = :disponible WHERE id = :id 
+        AND disponible = true");
+        $consulta->bindValue(':id', $mesa->id, PDO::PARAM_INT);
+        $consulta->bindValue(':codigoMesa', $mesa->codigoMesa, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', $mesa->estado, PDO::PARAM_STR);
+        $consulta->bindValue(':disponible', $mesa->disponible, PDO::PARAM_BOOL);
+
+        return $consulta->execute();
+    }
+
+    public static function borrarMesa($id)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_mesas SET 
+        disponible = false WHERE id = :id AND disponible = true");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+
+        return $consulta->execute();
+    }
+
+    public static function InformarEstadosDeMesas()
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("SELECT id, estado FROM tabla_mesas 
+        WHERE disponible = true");              
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Mesa');
+    }
 }
 
 ?>

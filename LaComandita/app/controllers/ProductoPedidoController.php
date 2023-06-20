@@ -1,5 +1,6 @@
 <?php
 require_once './models/ProductoPedido.php';
+require_once './controllers/LogController.php';
 require_once './models/Pedido.php';
 
 class ProductoPedidoController extends ProductoPedido
@@ -58,11 +59,47 @@ class ProductoPedidoController extends ProductoPedido
   
   public function ModificarUno($request, $response, $args)
   {
-    
+    $parametros = $request->getParsedBody();
+    $idPedido = $args["id"];
+    $pedido = Pedido::obtenerPedidoPorId($idPedido);
+
+    if($pedido)
+    {
+      $pedido->estado = $parametros['estado'];
+
+      if(Pedido::modificarPedido($pedido))
+      {
+        $payload = json_encode(array("mensaje" => "Pedido modificado con exito"));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
+    }
+    else
+    {
+      $payload = json_encode(array("mensaje" => "No se pudo modificar el pedido. Intente nuevamente"));  
+      $response->getBody()->write($payload);
+      $response = $response->withStatus(400);
+      return $response->withHeader('Content-Type', 'application/json');
+    }
   }
 
   public function BorrarUno($request, $response, $args)
   {   
-    
+    $idPedido =  $args["id"];
+
+      if(Pedido::borrarPedido($idPedido)){
+        $payload = json_encode(array("mensaje" => "Pedido borrado con exito"));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
+      else
+      {
+        $payload = json_encode(array("mensaje" => "No se pudo borrar el producto. Intente nuevamente."));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(400);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
   }
 }

@@ -1,0 +1,726 @@
+{
+	"info": {
+		"_postman_id": "ac49e935-5705-42a7-9740-d19717a01ae1",
+		"name": "LaComandaCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26857086"
+	},
+	"item": [
+		{
+			"name": "AltaSocios",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Federico",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "hdc",
+							"type": "text"
+						},
+						{
+							"key": "perfil",
+							"value": "Socio",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"alta"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaMozo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Agustin",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "asd",
+							"type": "text"
+						},
+						{
+							"key": "perfil",
+							"value": "Mozo",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaBartenders",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Monica",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "hdc",
+							"type": "text"
+						},
+						{
+							"key": "perfil",
+							"value": "Bartender",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaCerveceros",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Enrico",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "hdc",
+							"type": "text"
+						},
+						{
+							"key": "perfil",
+							"value": "Cervecero",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaCocineros",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Gordon",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "hdc",
+							"type": "text"
+						},
+						{
+							"key": "perfil",
+							"value": "Cocinero",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Usuarios",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "Federico",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "hdc",
+							"type": "text"
+						},
+						{
+							"key": "perfil",
+							"value": "Socio",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListaUsuarios",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/usuarios/mostrarTodos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"mostrarTodos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar Usuarios",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"id\": 17,\r\n            \"nombre\": \"Agustin Modificado\",\r\n            \"clave\": \"$2y$10$kNNDM8mUgmKGws4PymKNjurwdivrjgjKfV4b7JBE4xfpKYNr9wSQm\",\r\n            \"perfil\": \"Mozo\",\r\n            \"fechaAlta\": \"2023-06-16 00:00:00\",\r\n            \"fechaBaja\": null\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/modificarUsuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"modificarUsuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar Usuarios",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"id\": 25,\r\n            \"nombre\": \"Eliminable\",\r\n            \"clave\": \"$2y$10$n69kkP1Le.2sYG3hEY/N5unZeW73JkR9vBurOKReuljnD1sUtwE9y\",\r\n            \"perfil\": \"Mozo\",\r\n            \"fechaAlta\": \"2022-05-02 00:00:00\",\r\n            \"fechaBaja\": null\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:666/usuarios/borrarUsuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"usuarios",
+						"borrarUsuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaProducto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Daikiri",
+							"type": "text"
+						},
+						{
+							"key": "precio",
+							"value": "120",
+							"type": "text"
+						},
+						{
+							"key": "sector",
+							"value": "Bartender",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/productos/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"productos",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListaProductos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/productos/mostrarTodos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"productos",
+						"mostrarTodos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar Productos",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"id\": 3,\r\n            \"nombre\": \"Daikiri Modificado\",\r\n            \"precio\": \"420\",\r\n            \"sector\": \"Bartender\",\r\n            \"disponible\": 1\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:666/productos/modificarProducto",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"productos",
+						"modificarProducto"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar Productos",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/productos/borrarProducto/16",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"productos",
+						"borrarProducto",
+						"16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaMesas",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "codigoMesa",
+							"value": "A1012",
+							"type": "text"
+						},
+						{
+							"key": "estado",
+							"value": "cerrada",
+							"type": "text"
+						},
+						{
+							"key": "disponible",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/mesa/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"mesa",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListaMesas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/mesa/mostrarTodos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"mesa",
+						"mostrarTodos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar Mesa",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzA4ODU2MTAsImV4cCI6MTY3MDk0NTYxMCwiYXVkIjoiNTRhNTY0MjFlNWFhY2IzYTE1MWQ3M2MzNzE0MDg1YmQ1NWRiNDhjYSIsImRhdGEiOnsibm9tYnJlIjoiTWFyY29zIiwicGVyZmlsIjoic29jaW8ifSwiYXBwIjoiVGVzdCBKV1QifQ.vufepsQSBiKxNcO8MI1M4DZTBKrEGJ9CCC-FWH8NGAg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"id\": 12,\r\n            \"codigoMesa\": \"A1012 Modificada\",\r\n            \"estado\": \"cerrada\",\r\n            \"disponible\": 1\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:666/mesas/modificarMesa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"mesas",
+						"modificarMesa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar Mesa",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzA4ODU2MTAsImV4cCI6MTY3MDk0NTYxMCwiYXVkIjoiNTRhNTY0MjFlNWFhY2IzYTE1MWQ3M2MzNzE0MDg1YmQ1NWRiNDhjYSIsImRhdGEiOnsibm9tYnJlIjoiTWFyY29zIiwicGVyZmlsIjoic29jaW8ifSwiYXBwIjoiVGVzdCBKV1QifQ.vufepsQSBiKxNcO8MI1M4DZTBKrEGJ9CCC-FWH8NGAg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/mesas/borrarMesa/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"mesas",
+						"borrarMesa",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AltaPedido",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idMesa",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "codigoPedido",
+							"value": "A1231",
+							"type": "text"
+						},
+						{
+							"key": "idMozo",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "nombreCliente",
+							"value": "Juancito",
+							"type": "text"
+						},
+						{
+							"key": "productos",
+							"value": "[{\"producto\":\"Milanesa Napolitana\", \"cantidad\":\"3\"},\n{\"producto\":\"Quilmes\", \"cantidad\":\"2\"},\n{\"producto\":\"Daikiri\", \"cantidad\":\"1\"}]",
+							"type": "text"
+						},
+						{
+							"key": "estado",
+							"value": "pendiente",
+							"type": "text"
+						},
+						{
+							"key": "fotoMesa",
+							"type": "file",
+							"src": "/C:/XAMPP/htdocs/LaComandita/app/fotosMesas/mesa1.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:666/pedido/alta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"pedido",
+						"alta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListaPedidos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/pedidos/mostrarTodos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"pedidos",
+						"mostrarTodos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar Pedido",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzA4ODU2MTAsImV4cCI6MTY3MDk0NTYxMCwiYXVkIjoiNTRhNTY0MjFlNWFhY2IzYTE1MWQ3M2MzNzE0MDg1YmQ1NWRiNDhjYSIsImRhdGEiOnsibm9tYnJlIjoiTWFyY29zIiwicGVyZmlsIjoic29jaW8ifSwiYXBwIjoiVGVzdCBKV1QifQ.vufepsQSBiKxNcO8MI1M4DZTBKrEGJ9CCC-FWH8NGAg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"id\": 4,\r\n            \"idMesa\": 1,\r\n            \"codigoPedido\": \"A1231\",\r\n            \"idMozo\": 17,\r\n            \"nombreCliente\": \"Jauncito Modificado\",\r\n            \"fotoMesa\": \".\\\\fotosMesas\\\\mesa1.jpg\",\r\n            \"horarioPautado\": null,\r\n            \"horarioEntregado\": null,\r\n            \"totalFacturado\": null,\r\n            \"estado\": \"pendiente\"\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:666/pedidos/modificarPedido/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"pedidos",
+						"modificarPedido",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar Pedido",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzA4OTk4MTQsImV4cCI6MTY3MDk1OTgxNCwiYXVkIjoiNTRhNTY0MjFlNWFhY2IzYTE1MWQ3M2MzNzE0MDg1YmQ1NWRiNDhjYSIsImRhdGEiOnsibm9tYnJlIjoiQ3Jpc3RpYW4iLCJwZXJmaWwiOiJtb3pvIn0sImFwcCI6IlRlc3QgSldUIn0.PPcQMGEzJEZfSF1GQadpELlYRRaLp-cRsOfYzW04HBg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:666/pedidos/borrarPedido/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "666",
+					"path": [
+						"pedidos",
+						"borrarPedido",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

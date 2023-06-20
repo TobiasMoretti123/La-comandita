@@ -42,7 +42,7 @@ class Pedido
     public static function AsignarFotoPosterior($pedido)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE pedidos SET 
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_pedidos SET 
         fotoMesa = :fotoMesa WHERE id = :id");
         $consulta->bindValue(':id', $pedido->id, PDO::PARAM_INT);
         $consulta->bindValue(':fotoMesa', $pedido->fotoMesa, PDO::PARAM_STR);
@@ -68,6 +68,63 @@ class Pedido
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
-    } 
+    }
+    
+    public static function modificarPedido($pedido)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_pedidos SET nombreCliente = :nombreCliente, 
+        horarioPautado = :horarioPautado, horarioEntregado = :horarioEntregado, 
+        totalFacturado = :totalFacturado, estado = :estado WHERE id = :id");
+        $consulta->bindValue(':id', $pedido->id, PDO::PARAM_INT);
+        $consulta->bindValue(':nombreCliente', $pedido->nombreCliente, PDO::PARAM_STR);
+        $consulta->bindValue(':horarioPautado', $pedido->horarioPautado, PDO::PARAM_STR);
+        $consulta->bindValue(':horarioEntregado', $pedido->horarioEntregado, PDO::PARAM_STR);
+        $consulta->bindValue(':totalFacturado', $pedido->totalFacturado, PDO::PARAM_INT);
+        $consulta->bindValue(':estado', $pedido->estado, PDO::PARAM_STR);
+        
+        return $consulta->execute();
+    }
+
+    public static function borrarPedido($id)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_pedidos SET 
+        estado = 'cancelado' WHERE id = :id AND estado != 'cancelado'");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        return $consulta->execute(); 
+    }
+
+    public static function obtenerPedidoPorIdMesaYEntregado($idMesa)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
+        WHERE idMesa = :idMesa AND totalFacturado is NULL");
+        $consulta->bindValue(':idMesa', $idMesa, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
+    public static function obtenerPedidoPorIdMesa($idMesa)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
+        WHERE idMesa = :idMesa");
+        $consulta->bindValue(':idMesa', $idMesa, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
+
+    public static function obtenerPedidoPorIdMesaYEstado($idMesa)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
+        WHERE idMesa = :idMesa AND estado = 'listo para servir'");
+        $consulta->bindValue(':idMesa', $idMesa, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
 }
 ?>

@@ -66,12 +66,49 @@ class UsuarioController extends Usuario implements IApiUsable
 
     public function ModificarUno($request, $response, $args)
     {
-       
+      $datos = json_decode(file_get_contents("php://input"), true);
+      $usuarioAModificar = new Usuario();
+      $usuarioAModificar->id=$datos["id"]; 
+      $usuarioAModificar->nombre=$datos["nombre"]; 
+      $usuarioAModificar->clave=$datos["clave"]; 
+      $usuarioAModificar->perfil=$datos["perfil"];
+      $usuarioAModificar->fechaAlta=$datos["fechaAlta"]; 
+      if(array_key_exists("fechaAlta",$datos))
+      {
+        $usuarioAModificar->fechaAlta=$datos["fechaAlta"]; 
+      }
+      if(array_key_exists("fechaBaja",$datos))
+      {
+        $usuarioAModificar->fechaBaja=$datos["fechaBaja"]; 
+      }
+
+      if (Usuario::modificarUsuario($usuarioAModificar)) 
+      {        
+        $payload = json_encode(array("mensaje" => "Usuario modificado con exito"));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json');
+      } 
+      else
+      {
+        $payload = json_encode(array("mensaje" => "No se pudo modificar el usuario. Intente nuevamente"));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(400);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
     }
 
     public function BorrarUno($request, $response, $args)
     {
-      
+      $datos = json_decode(file_get_contents("php://input"), true);
+        $id=$datos["id"]; 
+        Usuario::borrarUsuario($id);
+
+        $payload = json_encode(array("mensaje" => "Usuario borrado con exito"));
+
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 ?>

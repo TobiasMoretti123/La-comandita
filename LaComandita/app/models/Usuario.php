@@ -52,5 +52,41 @@ class Usuario
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Usuario');
-    }   
+    }
+    
+    public static function modificarUsuario($usuario)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_usuarios SET 
+        nombre=:nombre, clave = :clave, perfil= :perfil, fechaAlta=:fechaAlta,fechaBaja=:fechaBaja WHERE id = :id");
+        $consulta->bindValue(':id', $usuario->id, PDO::PARAM_INT);
+        $consulta->bindValue(':nombre', $usuario->nombre, PDO::PARAM_STR);
+        $claveHash = password_hash($usuario->clave, PASSWORD_DEFAULT);
+        $consulta->bindValue(':clave', $claveHash, PDO::PARAM_STR);
+        $consulta->bindValue(':perfil', $usuario->perfil, PDO::PARAM_STR);
+        $consulta->bindValue(':fechaAlta', $usuario->fechaAlta, PDO::PARAM_STR);
+
+        if($usuario->fechaBaja != null)
+        {
+            $consulta->bindValue(':fechaBaja', $usuario->fechaBaja, PDO::PARAM_STR);
+        }
+        else
+        {
+            $consulta->bindValue(':fechaBaja', null, PDO::PARAM_STR);
+        }
+
+        return $consulta->execute();
+    }
+
+    public static function borrarUsuario($id)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_usuarios SET fechaBaja = :fechaBaja WHERE id = :id");
+        date_default_timezone_set("America/Argentina/Buenos_Aires");
+        $fechaBaja = date("Y-m-d H:i:s");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->bindValue(':fechaBaja', $fechaBaja);
+
+        return $consulta->execute();
+    }
 }

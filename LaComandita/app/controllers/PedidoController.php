@@ -5,6 +5,7 @@ require_once './models/Mesa.php';
 require_once './controllers/MesaController.php';
 require_once './controllers/ProductoController.php';
 require_once './controllers/ProductoPedidoController.php';
+require_once './controllers/LogController.php';
 require_once './interfaces/IApiUsable.php';
 
 class PedidoController extends Pedido implements IApiUsable
@@ -45,7 +46,8 @@ class PedidoController extends Pedido implements IApiUsable
           ProductoPedidoController::CargarUno($codigoPedido,$productoComprado->sector, $productoComprado->id, $producto->cantidad, "Pendiente");
         }
       }
-      $pedido->AltaPedido();  
+      $pedido->AltaPedido();
+      LogController::CargarUno($request, "Alta de un pedido");  
   
       $payload = json_encode(array("mensaje" => "Pedido creado con exito. El código de su pedido es: " 
       . $pedido->codigoPedido . ". Con él podrá verificar el estado de su pedido"));  
@@ -95,12 +97,52 @@ class PedidoController extends Pedido implements IApiUsable
     
     public function ModificarUno($request, $response, $args)
     {
-      
+      $datos = json_decode(file_get_contents("php://input"), true);
+      $pedido = new Pedido();
+      $pedido->id=$datos["id"]; 
+      $pedido->idMesa=$datos["idMesa"]; 
+      $pedido->codigoPedido=$datos["codigoPedido"]; 
+      $pedido->idMozo=$datos["idMozo"]; 
+      $pedido->nombreCliente=$datos["nombreCliente"];
+      $pedido->fotoMesa=$datos["fotoMesa"]; 
+      $pedido->horarioPautado=$datos["horarioPautado"];
+      $pedido->estado=$datos["estado"]; 
+  
+      if(Pedido::modificarPedido($pedido))
+      {
+        $payload = json_encode(array("mensaje" => "Pedido modificado con exito"));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
+      else
+      {
+        $payload = json_encode(array("mensaje" => "No se pudo modificar el pedido. Verifique los datos ingresados."));  
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(400);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
     }
 
     public function BorrarUno($request, $response, $args)
     {   
-      
+      $id =  $args["id"];
+      $pedidoABorrar=Pedido::obtenerPedidoPorId($id);
+      if(Pedido::borrarPedido($id))
+      {
+        ProductoPedido::borrarProductoPedidoPorCodigo($pedidoABorrar->codigoPedido);
+        $payload = json_encode(array("mensaje" => "Pedido cancelado con exito"));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
+      else
+      {
+        $payload = json_encode(array("mensaje" => "No se pudo cancelar el pedido. Verifique los datos ingresados."));
+        $response->getBody()->write($payload);
+        $response = $response->withStatus(400);
+        return $response->withHeader('Content-Type', 'application/json');
+      }
     }
 
     public static function tomarFoto()
@@ -132,6 +174,7 @@ class PedidoController extends Pedido implements IApiUsable
         } 
         else 
         {
+          LogController::CargarUno($request, "Asignar una foto al pedido");
           $payload = json_encode(array("mensaje" => "No se pudo asignar una foto al pedido"));
           $response = $response->withStatus(400);
         }
@@ -142,6 +185,100 @@ class PedidoController extends Pedido implements IApiUsable
         $response = $response->withStatus(400);
       }
 
+      $response->getBody()->write($payload);
+      return $response->withHeader('Content-Type', 'application/json');
+    }
+    
+    public static function calcularTiempoDelPedido()
+    {
+      $listaDePedidos = Pedido::obtenerTodos();
+      if($listaDePedidos)
+      {
+        foreach($listaDePedidos as $pedido)
+        {
+          $seccionesComanda = ProductoPedidoController::obtenerSeccionPorCodigoPedido($pedido->codigoPedido);
+          $maximoTiempoPedido = 0;
+          $todosTiemposDeterminados=true;
+          foreach($seccionesComanda as $seccion)
+          {
+            if($seccion->horarioPautado !=null )
+            {
+              if($seccion->horarioPautado > $maximoTiempoPedido)
+              {
+                $maximoTiempoPedido = $seccion->horarioPautado;
+              }
+            }
+            else
+            {
+              $todosTiemposDeterminados=false;
+              break;
+            }
+          }
+
+          if($todosTiemposDeterminados && $pedido->estado == "pendiente")
+          {
+            $pedido->estado = "en preparacion";
+            $pedido->horarioPautado = $maximoTiempoPedido;
+            Pedido::modificarPedido($pedido);
+          }
+        }
+      }
+    }
+
+    public static function EmitirInformeDePedidosYDemoras($request, $response, $args)
+    {
+      $pedidos = Pedido::obtenerTodos();
+      $cantidadDePedidos = count($pedidos);
+      $listadoDePedidosConEstado = array();
+
+      if($cantidadDePedidos>0)
+      {    
+        date_default_timezone_set("America/Argentina/Buenos_Aires");
+        $horarioActual = new DateTime("now");
+
+        foreach($pedidos as $pedido)
+        {
+          switch($pedido->estado)
+          {
+            case "pendiente":
+              $mensajeDeDemora = "El pedido aún no ha comenzado a prepararse";
+              break;
+            case "en preparacion":
+              $horarioPedido = datetime::createfromformat('Y-m-d H:i:s', $pedido->horarioPautado);
+              $diferenciaEnMinutos = $horarioActual->diff($horarioPedido);
+              $minutosDeDemora = $diferenciaEnMinutos->days * 24 * 60;
+              $minutosDeDemora += $diferenciaEnMinutos->h * 60;
+              $minutosDeDemora += $diferenciaEnMinutos->i;   
+              if($horarioPedido > $horarioActual)
+              {
+                $mensajeDeDemora = "0(aún quedan " . $minutosDeDemora ." minutos para terminar el pedido)";
+              }
+              else
+              {
+                $mensajeDeDemora = $minutosDeDemora ." minutos";
+              }
+              break;
+            case "listo para servir":
+              $mensajeDeDemora = 0;
+              break;
+            case "entregado":
+              $mensajeDeDemora = 0;
+              break;
+          }  
+          
+          $mensaje = "Pedido: " . $pedido->codigoPedido. " Estado: " . $pedido->estado. " Tiempo de demora: " . $mensajeDeDemora;
+          array_push($listadoDePedidosConEstado, $mensaje);
+          $response = $response->withStatus(200);
+          LogController::CargarUno($request, "Emitir informe de pedidos y tiempo de demora");  
+        }
+      }
+      else
+      {
+        $listadoDePedidosConEstado = array("Mensaje" => "No hay pedidos pendientes.");
+        $response = $response->withStatus(400); 
+      }
+  
+      $payload = json_encode($listadoDePedidosConEstado);
       $response->getBody()->write($payload);
       return $response->withHeader('Content-Type', 'application/json');
     } 
