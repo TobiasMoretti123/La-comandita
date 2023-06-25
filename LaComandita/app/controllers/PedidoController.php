@@ -290,7 +290,7 @@ class PedidoController extends Pedido implements IApiUsable
               $mensajeDeDemora = "El pedido aún no ha comenzado a prepararse";
               break;
             case "en preparacion":
-              $horarioPedido = datetime::createfromformat('Y-m-d H:i:s', $pedido->horarioPautado);
+              $horarioPedido = datetime::createfromformat('Y-m-d', $pedido->horarioPautado);
               $diferenciaEnMinutos = $horarioActual->diff($horarioPedido);
               $minutosDeDemora = $diferenciaEnMinutos->days * 24 * 60;
               $minutosDeDemora += $diferenciaEnMinutos->h * 60;

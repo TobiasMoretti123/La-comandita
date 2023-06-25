@@ -110,13 +110,13 @@ class ProductoPedidoController extends ProductoPedido
     switch($uri)
     {
       case "/ProductoPedido/InformePendientesBartender":
-        $perfil="bartender";
+        $perfil="Bartender";
         break;
       case "/ProductoPedido/InformePendientesCervecero":
-        $perfil="cervecero";
+        $perfil="Cervecero";
         break;
       case "/ProductoPedido/InformePendientesCocinero":
-        $perfil="cocinero";
+        $perfil="Cocinero";
         break;
     }
     $pedidosPendientes = ProductoPedido::InformarPendientesPorPerfil($perfil);
@@ -194,17 +194,18 @@ class ProductoPedidoController extends ProductoPedido
   public static function TerminarPedidoPorPerfil($request, $response, $args)
   {
     $uri=$_SERVER['REQUEST_URI'];
+    $mensajeTrabajo ="";
   
     switch($uri)
     {
       case "/ProductoPedido/TerminarPedidoBartender":
-        $perfil="bartender";
+        $perfil="Bartender";
         break;
       case "/ProductoPedido/TerminarPedidoCervecero":
-        $perfil="cervecero";
+        $perfil="Cervecero";
         break;
       case "/ProductoPedido/TerminarPedidoCocinero":
-        $perfil="cocinero";
+        $perfil="Cocinero";
         break;
     }
     $parametros = $request->getParsedBody();

@@ -57,15 +57,15 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/productos', function (RouteCollectorProxy $group) {
-  $group->post('/altaProducto', \ProductoController::class . ':CargarUno');
+  $group->post('/alta', \ProductoController::class . ':CargarUno');
   $group->get('/traerProductos', \ProductoController::class . ':TraerTodos');
   $group->get('/traerProductoPorId/{id}', \ProductoController::class . ':TraerUno');
   $group->put('/modificarProducto', \ProductoController::class . ':ModificarUno');
   $group->delete('/borrarProducto/{id}', \ProductoController::class . ':BorrarUno');
 });
 
-$app->group('/mesas', function (RouteCollectorProxy $group) {
-  $group->post('/altaMesa', \MesaController::class . ':CargarUno');
+$app->group('/mesa', function (RouteCollectorProxy $group) {
+  $group->post('/alta', \MesaController::class . ':CargarUno');
   $group->get('/traerMesas', \MesaController::class . ':TraerTodos');
   $group->get('/{usuario}', \MesaController::class . ':TraerUno');
   $group->put('/modificarMesa', \MesaController::class . ':ModificarUno');
@@ -77,7 +77,7 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) {
-  $group->post('/altaPedido', \PedidoController::class . ':CargarUno')->add(new CheckMozoMiddleware());
+  $group->post('/alta', \PedidoController::class . ':CargarUno')->add(new CheckMozoMiddleware());
   $group->post('/tomarFotoPosterior', \PedidoController::class . ':tomarFotoPosterior')->add(new CheckMozoMiddleware());
   $group->get('/traerPedidos', \PedidoController::class . ':TraerTodos');
   $group->get('/InformeDePedidosYDemoras',  \PedidoController::class . ':EmitirInformeDePedidosYDemoras')->add(new CheckSocioMiddleware());

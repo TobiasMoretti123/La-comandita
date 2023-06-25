@@ -73,7 +73,7 @@ class ProductoPedido
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDato->RetornarConsulta("SELECT * FROM tabla_productospedidos 
-        WHERE perfil = :perfil AND estado = 'pendiente' AND idEmpleado is null");              
+        WHERE perfil = :perfil AND estado = 'pendiente' AND idEmpleado = 0");              
         $consulta->bindValue(':perfil', $perfil, PDO::PARAM_STR);
         $consulta->execute();
 
@@ -131,7 +131,7 @@ class ProductoPedido
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT p.idProducto, r.nombre, SUM(p.cantidad) AS cantidad_vendida 
-        FROM tabla_productospedidos p LEFT JOIN productos r ON p.idProducto = r.id
+        FROM tabla_productospedidos p LEFT JOIN tabla_producto r ON p.idProducto = r.id
         WHERE p.estado='entregado'
         GROUP BY p.idProducto
         ORDER BY cantidad_vendida DESC");
