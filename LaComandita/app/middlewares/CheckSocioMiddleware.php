@@ -13,7 +13,7 @@ class CheckSocioMiddleware{
        try 
        {
         $data = AutentificadorJWT::ObtenerData($token);
-        if($data->perfil=="socio")
+        if($data->perfil=="Socio")
         {
           echo "El usuario es socio";
           $response= $handler->handle($request);

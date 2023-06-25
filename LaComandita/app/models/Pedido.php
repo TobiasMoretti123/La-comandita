@@ -1,4 +1,5 @@
 <?php
+
 class Pedido
 {
     public $id;
@@ -12,7 +13,7 @@ class Pedido
     public $totalFacturado;
     public $estado;
 
-    public function AltaPedido()
+    public function crearPedido()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("INSERT INTO tabla_pedidos (idMesa, codigoPedido, idMozo, 
@@ -28,40 +29,7 @@ class Pedido
         return $objAccesoDatos->RetornarUltimoIdInsertado();
     }
 
-    public static function ObtenerPedidoPorCodigo($codigoPedido)
-    {
-        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
-        WHERE codigoPedido = :codigoPedido");
-        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
-        $consulta->execute();
-
-        return $consulta->fetchObject('Pedido');
-    }
-
-    public static function AsignarFotoPosterior($pedido)
-    {
-        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_pedidos SET 
-        fotoMesa = :fotoMesa WHERE id = :id");
-        $consulta->bindValue(':id', $pedido->id, PDO::PARAM_INT);
-        $consulta->bindValue(':fotoMesa', $pedido->fotoMesa, PDO::PARAM_STR);
-
-        return $consulta->execute();
-    }
-
-    public static function ObtenerPedidoPorId($id)
-    {
-        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
-        WHERE id = :id AND estado != 'cancelado'");
-        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-        $consulta->execute();
-
-        return $consulta->fetchObject('Pedido');
-    }
-
-    public static function LeerPedidos()
+    public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos WHERE estado != 'cancelado'");
@@ -69,7 +37,18 @@ class Pedido
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
     }
-    
+
+    public static function obtenerPedido($codigoPedido)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos 
+        WHERE codigoPedido = :codigoPedido AND estado != 'cancelado'");
+        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
+
     public static function modificarPedido($pedido)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
@@ -95,6 +74,28 @@ class Pedido
         return $consulta->execute(); 
     }
 
+    public static function asignarFotoPosterior($pedido)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_pedidos SET 
+        fotoMesa = :fotoMesa WHERE id = :id");
+        $consulta->bindValue(':id', $pedido->id, PDO::PARAM_INT);
+        $consulta->bindValue(':fotoMesa', $pedido->fotoMesa, PDO::PARAM_STR);
+
+        return $consulta->execute();
+    }
+
+    public static function obtenerPedidoPorId($id)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
+        WHERE id = :id AND estado != 'cancelado'");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
+
     public static function obtenerPedidoPorIdMesaYEntregado($idMesa)
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
@@ -115,13 +116,116 @@ class Pedido
 
         return $consulta->fetchObject('Pedido');
     }
+    public static function obtenerPedidoPorCodigo($codigoPedido)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
+        WHERE codigoPedido = :codigoPedido");
+        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+        $consulta->execute();
 
+        return $consulta->fetchObject('Pedido');
+    }
     public static function obtenerPedidoPorIdMesaYEstado($idMesa)
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos
         WHERE idMesa = :idMesa AND estado = 'listo para servir'");
         $consulta->bindValue(':idMesa', $idMesa, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
+
+    public static function InformarListosParaServirTodos()
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("SELECT * FROM tabla_pedidos 
+        WHERE estado = 'listo para servir'");              
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
+    }
+
+    public static function InformarMesaMasUsada()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT T.idMesa,T.cantidad_de_usos FROM 
+        (SELECT idMesa, COUNT(idMesa) AS cantidad_de_usos FROM tabla_pedidos WHERE estado='entregado' 
+        GROUP BY idMesa ORDER BY cantidad_de_usos DESC) T LIMIT 1");
+        $consulta->execute();
+
+        return $consulta->fetchObject();
+    }
+
+    public static function InformarPedidosNoATiempo()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos 
+        WHERE horarioPautado<horarioEntregado AND estado != 'cancelado'");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
+    }
+
+    public static function InformarMesasOrdenadasPorFacturacion()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT p.idMesa,p.codigoPedido, p.totalFacturado, 
+        m.codigoMesa FROM tabla_pedidos p LEFT JOIN tabla_mesas m ON p.idMesa = m.id
+        WHERE p.estado='entregado' AND m.estado='cerrada' AND p.totalFacturado IS NOT NULL
+        ORDER BY p.totalFacturado");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
+    }
+
+    public static function InformarFacturadoEntreFechasPorMesa($idMesa,$fechaDesde, $fechaHasta)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT p.idMesa, m.codigoMesa, SUM(p.totalFacturado) 
+        AS facturacion_total FROM tabla_pedidos p LEFT JOIN tabla_mesas m ON p.idMesa = m.id
+        WHERE p.estado ='entregado' AND m.estado='cerrada' AND p.totalFacturado IS NOT NULL
+        AND p.idMesa=:idMesa AND p.horarioEntregado BETWEEN :fechaDesde AND :fechaHasta
+        GROUP BY p.idMesa");
+        $consulta->bindValue(':idMesa', $idMesa, PDO::PARAM_INT);
+        $consulta->bindValue(':fechaDesde', $fechaDesde);
+        $consulta->bindValue(':fechaHasta', $fechaHasta);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Pedido');
+    }
+
+    public static function InformarPedidosCancelados()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_pedidos 
+        WHERE estado = 'cancelado'");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
+    }
+
+    public static function InformarMesaMenosUsada()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT T.idMesa,T.cantidad_de_usos FROM 
+        (SELECT idMesa, COUNT(idMesa) AS cantidad_de_usos FROM tabla_pedidos WHERE estado='entregado' 
+        GROUP BY idMesa ORDER BY cantidad_de_usos ASC) T LIMIT 1");
+        $consulta->execute();
+
+        return $consulta->fetchObject();
+    }
+
+    public static function InformarFacturacionAcumuladaMesas($criterio)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT p.idMesa, m.codigoMesa, SUM(p.totalFacturado) 
+        AS facturacion_total FROM tabla_pedidos p LEFT JOIN tabla_mesas m ON p.idMesa = m.id
+        WHERE p.estado ='entregado' AND m.estado='cerrada' AND p.totalFacturado IS NOT NULL
+        GROUP BY p.idMesa
+        ORDER BY p.totalFacturado $criterio LIMIT 1");
+        $consulta->bindValue(':criterio', $criterio);
         $consulta->execute();
 
         return $consulta->fetchObject('Pedido');

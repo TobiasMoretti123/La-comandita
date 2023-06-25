@@ -11,7 +11,7 @@ class ProductoPedido
     public $horarioPautado;
     public $estado;
 
-    public function AltaProductoPedido()
+    public function crearProductoPedido()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
 
@@ -28,7 +28,7 @@ class ProductoPedido
         return $objAccesoDatos->RetornarUltimoIdInsertado();
     }
 
-    public static function LeerProductosPedidos()
+    public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_productospedidos 
@@ -37,7 +37,7 @@ class ProductoPedido
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
     }
-    
+
     public static function modificarProductoPedido($pedido)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
@@ -62,11 +62,81 @@ class ProductoPedido
     public static function borrarProductoPedidoPorCodigo($codigoPedido)
     {       
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productospedidos
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_productospedidos
         SET estado = 'cancelado' WHERE codigoPedido = :codigoPedido AND estado != 'cancelado'");
         $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_INT);
         
         $consulta->execute();   
     }
+
+    public static function InformarPendientesPorPerfil($perfil)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("SELECT * FROM tabla_productospedidos 
+        WHERE perfil = :perfil AND estado = 'pendiente' AND idEmpleado is null");              
+        $consulta->bindValue(':perfil', $perfil, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
+    }
+
+    public static function InformarEnPreparacionPorPerfil($perfil)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("SELECT * FROM tabla_productospedidos 
+        WHERE perfil = :perfil AND estado = 'en preparacion'");              
+        $consulta->bindValue(':perfil', $perfil, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
+    }
+
+    public static function TomarPedidoPorPerfil($productoPedido)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE tabla_productospedidos SET idEmpleado = :idEmpleado, 
+        horarioPautado= :horarioPautado,estado = :estado WHERE codigoPedido = :codigoPedido AND perfil = :perfil AND estado = 'pendiente'");
+        $consulta->bindValue(':codigoPedido', $productoPedido->codigoPedido, PDO::PARAM_STR);
+        $consulta->bindValue(':idEmpleado', $productoPedido->idEmpleado, PDO::PARAM_INT);
+        $consulta->bindValue(':perfil', $productoPedido->perfil, PDO::PARAM_STR);
+        $consulta->bindValue(':horarioPautado', $productoPedido->horarioPautado);
+        $consulta->bindValue(':estado', $productoPedido->estado, PDO::PARAM_STR);
+
+        $consulta->execute();
+    }
+
+    public static function InformarListosParaServirPorPerfil($perfil)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("SELECT * FROM tabla_productospedidos 
+        WHERE perfil = :perfil AND estado = 'listo para servir'");              
+        $consulta->bindValue(':perfil', $perfil, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
+    }
+
+    public static function obtenerSeccionPorCodigoPedido($codigoPedido)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("SELECT * FROM tabla_productospedidos 
+        WHERE codigoPedido = :codigoPedido");     
+        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
+    }
+
+    public static function InformarProdOrdenadoPorCantVenta()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT p.idProducto, r.nombre, SUM(p.cantidad) AS cantidad_vendida 
+        FROM tabla_productospedidos p LEFT JOIN productos r ON p.idProducto = r.id
+        WHERE p.estado='entregado'
+        GROUP BY p.idProducto
+        ORDER BY cantidad_vendida DESC");
+        $consulta->execute();
+        
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
+    }
 }
-?>

@@ -7,7 +7,7 @@ class AutenticadorController extends AutentificadorJWT
     public function Login($request, $response,$args)
     {
         $parametros = $request->getParsedBody();
-        $usuarioBaseDeDatos=Usuario::ObtenerUsuarioPorNombre($parametros["nombre"]);
+        $usuarioBaseDeDatos=Usuario::obtenerUsuario($parametros["nombre"]);
         if($usuarioBaseDeDatos !=null)
         {
             if(password_verify($parametros["clave"],$usuarioBaseDeDatos->clave))

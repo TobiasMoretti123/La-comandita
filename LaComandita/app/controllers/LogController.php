@@ -7,7 +7,7 @@ class LogController extends Log
 {
   public static function CargarUno($request, $operacion)
   {
-    $header = $request->getHeaderLine('globals'); 
+    $header = $request->getHeaderLine('Authorization'); 
     $token = trim(explode("Bearer", $header)[1]);
     $data = AutentificadorJWT::ObtenerData($token); 
     $usuario = UsuarioController::obtenerUsuario($data->nombre);

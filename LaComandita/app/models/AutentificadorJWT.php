@@ -18,7 +18,7 @@ class AutentificadorJWT
             'data' => $datos,
             'app' => "Test JWT"
         );
-        return JWT::encode($payload, self::$claveSecreta);
+        return JWT::encode($payload, self::$claveSecreta, self::$tipoEncriptacion);
     }
 
     public static function VerificarToken($token)

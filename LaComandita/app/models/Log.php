@@ -10,7 +10,7 @@ class Log
     public function crearLog()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDatos->RetornarConsulta("INSERT INTO logs (idUsuario, fecha, operacion)
+        $consulta = $objAccesoDatos->RetornarConsulta("INSERT INTO tabla_logs (idUsuario, fecha, operacion)
         VALUES (:idUsuario, :fecha, :operacion)");
 
         $consulta->bindValue(':idUsuario', $this->idUsuario, PDO::PARAM_INT);
@@ -28,7 +28,7 @@ class Log
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT u.perfil, COUNT(l.idUsuario) AS cantidad_operaciones 
-        FROM logs l LEFT JOIN usuarios u ON l.idUsuario = u.id
+        FROM tabla_logs l LEFT JOIN tabla_usuarios u ON l.idUsuario = u.id
         GROUP BY u.perfil");
         $consulta->execute();
         
@@ -39,7 +39,7 @@ class Log
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT l.idUsuario,u.nombre,u.perfil,COUNT(l.idUsuario) AS cantidad_operaciones 
-        FROM logs l LEFT JOIN usuarios u ON l.idUsuario = u.id
+        FROM tabla_logs l LEFT JOIN tabla_usuarios u ON l.idUsuario = u.id
         GROUP BY l.idUsuario,u.perfil
         ORDER BY u.perfil");
         $consulta->execute();
@@ -51,7 +51,7 @@ class Log
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT l.idUsuario,u.nombre,l.fecha,l.operacion 
-        FROM logs l LEFT JOIN usuarios u ON l.idUsuario = u.id
+        FROM tabla_logs l LEFT JOIN tabla_usuarios u ON l.idUsuario = u.id
         WHERE l.idUsuario=$idEmpleado AND l.operacion='Login'
         ORDER BY l.fecha");
         $consulta->execute();
@@ -63,7 +63,7 @@ class Log
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT l.idUsuario, u.nombre, l.fecha, l.operacion
-        FROM logs l LEFT JOIN usuarios u ON l.idUsuario = u.id
+        FROM tabla_logs l LEFT JOIN tabla_usuarios u ON l.idUsuario = u.id
         WHERE l.idUsuario=$idEmpleado");
         $consulta->execute();
         

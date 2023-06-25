@@ -8,7 +8,7 @@ class Producto
     public $sector;
     public $disponible;
 
-    public function AltaProducto()
+    public function crearProducto()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("INSERT INTO tabla_productos (nombre, precio, sector, 
@@ -22,35 +22,13 @@ class Producto
         return $objAccesoDatos->RetornarUltimoIdInsertado();
     }
 
-    public static function LeerProductos()
+    public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_productos WHERE disponible = true");
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Producto');
-    }
-    
-    public static function ObtenerProductoPorId($id)
-    {
-        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_productos WHERE id = :id 
-        AND disponible = true");
-        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-        $consulta->execute();
-
-        return $consulta->fetchObject('Producto');
-    }
-
-    public static function ObtenerProductoPorNombre($nombre)
-    {
-        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_productos 
-        WHERE nombre = :nombre AND disponible = true");
-        $consulta->bindValue(':nombre', $nombre, PDO::PARAM_INT);
-        $consulta->execute();
-
-        return $consulta->fetchObject('Producto');
     }
 
     public static function modificarProducto($producto)
@@ -74,6 +52,28 @@ class Producto
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
 
         return $consulta->execute();
+    }
+    
+    public static function obtenerProductoPorId($id)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_productos WHERE id = :id 
+        AND disponible = true");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Producto');
+    }
+    
+    public static function obtenerProductoPorNombre($nombre)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM tabla_productos
+        WHERE nombre = :nombre AND disponible = true");
+        $consulta->bindValue(':nombre', $nombre, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Producto');
     }
 }
 ?>
